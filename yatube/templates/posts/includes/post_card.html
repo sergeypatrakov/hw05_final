@@ -1,0 +1,32 @@
+<article>
+  {% include 'posts/includes/image_card.html' %}
+  <ul>
+    <li>
+      Автор:
+      <a href="{% url 'posts:profile' post.author.username %}">
+        {% if post.author.get_full_name %}
+        <a href="{% url 'posts:profile' post.author.username %}">
+          {{ post.author.get_full_name }}
+        {% else %} 
+          {{ post.author.username }} 
+        {% endif %}
+      </a>
+    </li>
+    <li>
+      Дата публикации: {{ post.pub_date|date:"d E Y"}}
+    </li>
+  </ul>
+  <p>
+    <span class="border d-block border-primary">{{ post.text }}</span>
+  </p>
+  <p>
+    <a href="{% url 'posts:post_detail' post.id %}">Подробная информация </a>
+  </p>
+  <p>
+    {% if 'group_flag=False' and post.group %}
+      <a href="{% url 'posts:group_list' post.group.slug %}">#{{ post.group.title }}</a>
+    {% else %}
+      <span style='color: red'>Этой публикации нет ни в одном сообществе.</span>
+    {% endif %}
+  </p>
+</article>    
