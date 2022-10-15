@@ -1,6 +1,5 @@
 import shutil
 import tempfile
-from urllib import response
 
 from django.conf import settings
 from django.core.cache import cache
@@ -203,7 +202,7 @@ class FollowTest(TestCase):
         self.author_client.force_login(self.follower)
         self.follower_client = Client()
         self.follower_client.force_login(self.author)
-    
+
     def test_follow(self):
         """Проверяем, что автор может подписаться."""
         follow_count = Follow.objects.count()
@@ -213,7 +212,7 @@ class FollowTest(TestCase):
                 args=(self.author.username,),
             )
         )
-        follow = Follow.objects.all().first()
+        Follow.objects.all().first()
         self.assertEqual(Follow.objects.count(), follow_count + 1)
 
     def test_unfollow(self):
@@ -247,7 +246,7 @@ class FollowTest(TestCase):
             reverse('posts:follow_index')
         )
         self.assertIn(post, response.context['page_obj'])
-    
+
     def test_new_post_no_add_in_followers(self):
         """Новая запись не появляется у тех, кто не подписан."""
         post = Post.objects.create(
