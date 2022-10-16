@@ -114,7 +114,6 @@ class PostURLTests(TestCase):
                         'posts:post_detail',
                         args=(self.post.id,),
                     ))
-                    
                 else:
                     response = self.author_client.get(reverse(
                         name, args=args
