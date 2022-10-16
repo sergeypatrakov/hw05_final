@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load user_filters %}
 {% load thumbnail %}
-{% block title %}Пост: {{post.text|truncatechars:30}}{% endblock %}
+{% block title %}Пост: {{ post.text|truncatechars:30 }}{% endblock %}
 {% block content %}
   <div class="container py-5">
     <div class="row">
@@ -60,20 +60,7 @@
       </div>
     {% endif %}
 
-    {% for comment in comments %}
-      <div class="media mb-4">
-        <div class="media-body">
-          <h5 class="mt-0">
-            <a href="{% url 'posts:profile' comment.author.username %}">
-              {{ comment.author.username }}
-            </a>
-          </h5>
-          <p>
-            {{ comment.text }}
-          </p>
-        </div>
-      </div>
-    {% endfor %} 
+    {% include 'posts/includes/comments.html' %}
     </div>
   </div>
 {% endblock %}

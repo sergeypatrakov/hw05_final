@@ -70,6 +70,10 @@ class Comment(models.Model):
     text = models.TextField(verbose_name='Текст комментария')
     created = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
 
 class Follow(models.Model):
     user = models.ForeignKey(
@@ -84,3 +88,12 @@ class Follow(models.Model):
         related_name='following',
         verbose_name='Автор',
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'], name='unique_following'
+            )
+        ]
+        verbose_name = 'Подписчик'
+        verbose_name_plural = 'Подписчики'

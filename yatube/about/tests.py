@@ -1,28 +1,27 @@
 from http import HTTPStatus
 
-from django.test import Client, TestCase
+from django.test import TestCase
 
 
 class AboutURLTests(TestCase):
-    def setUp(self):
-        self.guest_client = Client()
+    def test_all_about_exist_at_desired_location(self):
+        """Проверяем, чтто страницы доступны пользователям."""
+        urls = {
+            '/about/author/': HTTPStatus.OK,
+            '/about/tech/': HTTPStatus.OK,
+        }
+        for address, code in urls.items():
+            with self.subTest(address=address):
+                response = self.client.get(address).status_code
+                self.assertEqual(response, code)
 
-    def test_author_url_exist_at_desired_location(self):
-        """Страница '/author/' доступна любому пользователю."""
-        response = self.guest_client.get('/about/author/')
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_author_url_uses_correct_template(self):
-        """Проверка шаблона для адреса '/about/author/'."""
-        response = self.guest_client.get('/about/author/')
-        self.assertTemplateUsed(response, 'about/author.html')
-
-    def test_tech_url_exist_at_desired_location(self):
-        """Страница '/tech/' доступна любому пользователю."""
-        response = self.guest_client.get('/about/tech/')
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_tech_url_uses_correct_template(self):
-        """Проверка шаблона для адреса '/about/tech/'."""
-        response = self.guest_client.get('/about/tech/')
-        self.assertTemplateUsed(response, 'about/tech.html')
+    def test_all_about_url_uses_correct_template(self):
+        """Проверяем работу шаблоны."""
+        templates = {
+            '/about/author/': 'about/author.html',
+            '/about/tech/': 'about/tech.html',
+        }
+        for address, template in templates.items():
+            with self.subTest(address=address):
+                response = self.client.get(address)
+                self.assertTemplateUsed(response, template)

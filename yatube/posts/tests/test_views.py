@@ -212,16 +212,16 @@ class FollowTest(TestCase):
                 args=(self.author.username,),
             )
         )
-        Follow.objects.all().first()
+        follow = Follow.objects.all().first()
         self.assertEqual(Follow.objects.count(), follow_count + 1)
+        self.assertEqual(follow.author, self.author)
+        self.assertEqual(follow.user, self.follower)
 
     def test_unfollow(self):
         """Проверяем, что автор может отписаться."""
-        self.author_client.post(
-            reverse(
-                'posts:profile_follow',
-                args=(self.author.username,),
-            )
+        Follow.objects.create(
+            user=self.follower,
+            author=self.author,
         )
         follow_count = Follow.objects.count()
         self.author_client.post(

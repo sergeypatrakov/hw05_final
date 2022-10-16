@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.cache import cache_page
 
 from .forms import CommentForm, PostForm
-from .models import Comment, Follow, Group, Post, User
+from .models import Follow, Group, Post, User
 from .utils import get_page
 
 
@@ -32,16 +32,24 @@ def profile(request, username):
     author = get_object_or_404(User, username=username)
     post_list = author.posts.select_related('group')
     page_obj = get_page(request, post_list)
+    followers = author.following.all()
+    following = request.user.is_authenticated
+    if following:
+        following = author.following.filter(
+            user=request.user
+        )
     context = {
         'page_obj': page_obj,
         'author': author,
+        'following': following,
+        'followers': followers,
     }
     return render(request, 'posts/profile.html', context)
 
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    comments = Comment.objects.filter(post_id__exact=post.pk)
+    comments = post.comments.all()
     context = {
         'post': post,
         'form': CommentForm(),
