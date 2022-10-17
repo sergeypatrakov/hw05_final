@@ -87,13 +87,6 @@ class PostFormTests(TestCase):
             Post.objects.count(),
             post_count + 1
         )
-        self.assertTrue(
-            Post.objects.filter(
-                text='Тестовый текст',
-                group=self.group,
-                image='posts/small.gif'
-            ).exists()
-        )
         post = Post.objects.first()
         self.assertEqual(post.text, form_data['text'])
         self.assertEqual(post.author, self.author)
